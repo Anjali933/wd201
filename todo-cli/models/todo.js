@@ -1,9 +1,8 @@
-
-/* eslint-disable no-unused-vars */
 // models/todo.js
 'use strict';
-const {Model} = require('sequelize');
-
+const {
+  Model,Op, where
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Todo extends Model {
     /**
@@ -18,82 +17,93 @@ module.exports = (sequelize, DataTypes) => {
       console.log("My Todo list \n");
 
       console.log("Overdue");
-      let over = await Todo.overdue();
-      console.log(over.map((items) => items.displayableString()).join('\n'));
+      // FILL IN HERE
+      const overdueTasks = await Todo.findAll({
+        where: {
+          dueDate: { [Op.lt]: new Date() }
+      
+        },
+      });
+  overdueTasks.forEach(task => {
+    console.log(task.displayableString());
+  });
       console.log("\n");
 
       console.log("Due Today");
-      let tod = await Todo.dueToday();
-      console.log(tod.map((items) => items.displayableString()).join('\n'));
+      // FILL IN HERE
+      const TodaydueTasks = await Todo.findAll({
+        where: {
+          dueDate: { [Op.eq]: new Date() }
+      
+        },
+      });
+  TodaydueTasks.forEach(task => {
+    console.log(task.displayableString());
+  });
       console.log("\n");
 
       console.log("Due Later");
-      let later = await Todo.dueLater();
-      console.log(later.map((items) => items.displayableString()).join('\n'));
+      // FILL IN HERE
+      const LaterdueTasks = await Todo.findAll({
+        where: {
+          dueDate: { [Op.gt]: new Date() }
+      
+        },
+      });
+  LaterdueTasks.forEach(task => {
+    console.log(task.displayableString());
+  });
     }
 
-    static today = new Date().toISOString().split("T")[0];
-
     static async overdue() {
-      const over = await Todo.findAll({
-        where:{
-          dueDate: {
-            [sequelize.Sequelize.Op.lt] : Todo.today
-          }
+      // FILL IN HERE TO RETURN OVERDUE ITEMS
+      return  await Todo.findAll({
+        where: {
+          dueDate: { [Op.lt]: new Date() }
         }
       });
-      return over;
+      
     }
 
     static async dueToday() {
-      const tod = await Todo.findAll({
-        where:{
-          dueDate: Todo.today
+      // FILL IN HERE TO RETURN ITEMS DUE tODAY
+       return await Todo.findAll({
+        where: {
+          dueDate: { [Op.eq]: new Date() }
         }
-      });
-      return tod;
+       });
+      
     }
 
     static async dueLater() {
-      let tom = new Date().setDate(new Date().getDate()+1);
-      const lat = await Todo.findAll({
-        where:{
-          dueDate: {
-            [sequelize.Sequelize.Op.gte] : tom
-          }
+      // FILL IN HERE TO RETURN ITEMS DUE LATER
+       return await Todo.findAll({
+        where: {
+          dueDate: { [Op.gt]: new Date() }
         }
       });
-      return lat;
     }
 
     static async markAsComplete(id) {
-      const item = await Todo.findByPk(id);
-      
-      if(item){
-        item.completed = true;
-        await item.save();
-      }
-      console.log("Item not Found !");
+      // FILL IN HERE TO MARK AN ITEM AS COMPLETE
+      await Todo.update({ completed: true }, {
+        where: {
+          id: id
+        }
+      });
+
     }
 
     displayableString() {
+      const today = new Date().toLocaleDateString();
+  const dueDate = new Date(this.dueDate).toLocaleDateString();
+
+  if (dueDate === today) {
+    const checkbox = this.completed ? "[x]" : "[ ]";
+    return `${this.id}. ${checkbox} ${this.title}`;
+  }
+   
       let checkbox = this.completed ? "[x]" : "[ ]";
-
-      const checkToday = (date,t) => {
-        let date_arr = String(date).split("-");
-        let today_arr = String(t).split("-");
-
-        for (let i = 0; i < 8; i++) {
-          if (date_arr[i] != today_arr[i]) {
-            return false;
-          }
-        }
-        return true;
-      }
-
-      if(checkToday(this.dueDate,Todo.today)){
-        return `${this.id}. ${checkbox} ${this.title}`;
-      }
       return `${this.id}. ${checkbox} ${this.title} ${this.dueDate}`;
     }
   }
