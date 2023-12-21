@@ -1,37 +1,29 @@
-/* eslint-disable space-in-parens */
-/* eslint-disable object-curly-spacing */
-/* eslint-disable eol-last */
-/* eslint-disable padded-blocks */
-/* eslint-disable semi */
-/* eslint-disable indent */
-/* eslint-disable quotes */
-/* eslint-disable no-undef */
 const todoList = require("../todo");
 const { all, markAsComplete, add, overdue,
     dueToday,
     dueLater } = todoList();
-const TOday = new Date(); 
-const one_Day = 60 * 60 * 24 * 1000;
+const tdy = new Date(); 
+const ody = 60 * 60 * 24 * 1000;
 describe("todoList", () => {
   beforeAll(() => {
-    const TOday = new Date();
+    const tdy = new Date();
      //referred to discord forum for this line of code
     add({
-      title: "Test todo",
+      title: "Teto",
       completed: false,
-      dueDate: new Date(TOday.getTime() - 1 * one_Day).toLocaleDateString(
+      dueDate: new Date(tdy.getTime() - 1 * ody).toLocaleDateString(
         "en-CA",
       ),
     });
     add({
-      title: "Test todo2",
+      title: "Teto2",
       completed: false,
-      dueDate: new Date(TOday.getTime() + 1 * one_Day).toLocaleDateString(
+      dueDate: new Date(tdy.getTime() + 1 * ody).toLocaleDateString(
         "en-CA",
       ),
     });
     add({
-      title: "Test todo3",
+      title: "Teto3",
       completed: false,
       dueDate: new Date().toLocaleDateString("en-CA"),
     });
@@ -39,7 +31,7 @@ describe("todoList", () => {
   test("Should add new todo", () => {
     const todoItemsCount = all.length;
     add({
-      title: "Test todo",
+      title: "Teto",
       completed: false,
       dueDate: new Date().toLocaleDateString("en-CA"),
     });
@@ -53,9 +45,9 @@ describe("todoList", () => {
   test("checks return a list of overdue todos", () => {
     const overDueTodoItemsCount =overdue().length;
     add({
-        title: "Test todo",
+        title: "Teto",
         completed: false,
-        dueDate: new Date(TOday.getTime() - 1 * one_Day).toLocaleDateString(
+        dueDate: new Date(tdy.getTime() - 1 * ody).toLocaleDateString(
           "en-CA",
         ),
       });
@@ -64,7 +56,7 @@ describe("todoList", () => {
   test("checks return a list of todos due today", () => {
     const duetodayTodoItemsCount =dueToday().length;
     add({
-        title: "Test todo3",
+        title: "Teto3",
         completed: false,
         dueDate: new Date().toLocaleDateString("en-CA"),
       });
@@ -73,9 +65,9 @@ describe("todoList", () => {
   test("checks return a list of todos due later", () => {
     const dueLaterTodoItemsCount =dueLater().length;
     add({
-        title: "Test todo2",
+        title: "Teto2",
         completed: false,
-        dueDate: new Date(TOday.getTime() + 2 * one_Day)
+        dueDate: new Date(tdy.getTime() + 2 * ody)
         .toISOString()
         .slice(0, 10),
       });
