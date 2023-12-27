@@ -2,23 +2,23 @@ const todoList = require("../todo");
 const { all, markAsComplete, add, overdue,
     dueToday,
     dueLater } = todoList();
-const tdy = new Date(); 
-const ody = 60 * 60 * 24 * 1000;
+const td = new Date(); 
+const od = 60 * 60 * 24 * 1000;
 describe("todoList", () => {
   beforeAll(() => {
-    const tdy = new Date();
+    const td = new Date();
      //referred to discord forum for this line of code
     add({
       title: "Teto",
       completed: false,
-      dueDate: new Date(tdy.getTime() - 1 * ody).toLocaleDateString(
+      dueDate: new Date(td.getTime() - 1 * od).toLocaleDateString(
         "en-CA",
       ),
     });
     add({
       title: "Teto2",
       completed: false,
-      dueDate: new Date(tdy.getTime() + 1 * ody).toLocaleDateString(
+      dueDate: new Date(td.getTime() + 1 * od).toLocaleDateString(
         "en-CA",
       ),
     });
@@ -47,7 +47,7 @@ describe("todoList", () => {
     add({
         title: "Teto",
         completed: false,
-        dueDate: new Date(tdy.getTime() - 1 * ody).toLocaleDateString(
+        dueDate: new Date(td.getTime() - 1 * od).toLocaleDateString(
           "en-CA",
         ),
       });
@@ -67,7 +67,7 @@ describe("todoList", () => {
     add({
         title: "Teto2",
         completed: false,
-        dueDate: new Date(tdy.getTime() + 2 * ody)
+        dueDate: new Date(td.getTime() + 2 * od)
         .toISOString()
         .slice(0, 10),
       });
